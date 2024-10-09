@@ -33,7 +33,7 @@
           mkdir -p $out/bin
 
           echo "#!${pkgs.bash}/bin/bash" >> $out/bin/piper-speak
-          echo "echo \"\$@\" | ${pkgs.piper-tts}/bin/piper --model \"${piperModel}\" -c \"${piperModelJson}\" -s 605 --output-raw --length-scale ${pkgs.lib.strings.floatToString lengthScale} --sentence-silence 0.0 | ${pkgs.ffmpeg}/bin/ffmpeg -f s16le -i pipe:0 -filter_complex \"[0:a]asetrate=44100*${pkgs.lib.strings.floatToString pitch},aresample=44100,atempo=${pkgs.lib.strings.floatToString atempo}\" -f s16le pipe:1 | ${pkgs.alsa-utils}/bin/aplay -r 22050 -f S16_LE -t raw" >> $out/bin/piper-speak
+          echo "cat - | ${pkgs.piper-tts}/bin/piper --model \"${piperModel}\" -c \"${piperModelJson}\" -s 605 --output-raw --length-scale ${pkgs.lib.strings.floatToString lengthScale} --sentence-silence 0.0 | ${pkgs.ffmpeg}/bin/ffmpeg -f s16le -i pipe:0 -filter_complex \"[0:a]asetrate=44100*${pkgs.lib.strings.floatToString pitch},aresample=44100,atempo=${pkgs.lib.strings.floatToString atempo}\" -f s16le pipe:1 | ${pkgs.alsa-utils}/bin/aplay -r 22050 -f S16_LE -t raw" >> $out/bin/piper-speak
 
           chmod +x $out/bin/piper-speak
         '';
